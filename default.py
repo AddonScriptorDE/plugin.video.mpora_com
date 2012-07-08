@@ -7,6 +7,11 @@ xbox = xbmc.getCondVisibility("System.Platform.xbox")
 settings = xbmcaddon.Addon(id='plugin.video.mpora_com')
 translation = settings.getLocalizedString
 
+maxVideoQuality=settings.getSetting("maxVideoQuality")
+
+qual=["720p","540p"]
+maxVideoQuality=qual[int(maxVideoQuality)]
+
 def index():
         addDir(translation(30002),"http://mpora.com/videos",'sortDirection',"")
         addDir(translation(30003),"http://mpora.com/snowboarding/videos",'sortDirection',"")
@@ -67,7 +72,7 @@ def playVideo(url):
         content = getUrl(url)
         match=re.compile('<video controls="controls" height="(.+?)" id="(.+?)" preload="(.+?)" src="(.+?)" width="(.+?)"></video>', re.DOTALL).findall(content)
         url=match[0][3]
-        if url.find("_640"):
+        if maxVideoQuality=="720p" and url.find("_640"):
           req = urllib2.Request(url.replace("_640","_1280"))
           try:
             urllib2.urlopen(req)
