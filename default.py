@@ -8,6 +8,12 @@ settings = xbmcaddon.Addon(id='plugin.video.mpora_com')
 translation = settings.getLocalizedString
 
 maxVideoQuality=settings.getSetting("maxVideoQuality")
+forceViewMode=settings.getSetting("forceViewMode")
+if forceViewMode=="true":
+  forceViewMode=True
+else:
+  forceViewMode=False
+viewMode=str(settings.getSetting("viewMode"))
 
 qual=["720p","540p"]
 maxVideoQuality=qual[int(maxVideoQuality)]
@@ -29,6 +35,8 @@ def index():
         addDir(translation(30015),"http://mpora.com/outdoor/videos",'sortDirection',"")
         addDir(translation(30020),"",'search',"")
         xbmcplugin.endOfDirectory(pluginhandle)
+        if forceViewMode==True:
+          xbmc.executebuiltin('Container.SetViewMode('+viewMode+')')
 
 def sortDirection(url):
         urlRecent=url+"/recent"
@@ -39,6 +47,8 @@ def sortDirection(url):
         addDir(translation(30019),urlHD,'listVideos',"")
         addDir(translation(30018),urlBrands,'listVideos',"")
         xbmcplugin.endOfDirectory(pluginhandle)
+        if forceViewMode==True:
+          xbmc.executebuiltin('Container.SetViewMode('+viewMode+')')
 
 def listVideos(url):
         content = getUrl(url)
@@ -60,6 +70,8 @@ def listVideos(url):
           urlNext="http://mpora.com"+matchPage[0]
           addDir(translation(30001),urlNext,'listVideos',"")
         xbmcplugin.endOfDirectory(pluginhandle)
+        if forceViewMode==True:
+          xbmc.executebuiltin('Container.SetViewMode('+viewMode+')')
 
 def search():
         keyboard = xbmc.Keyboard('', translation(30020))
